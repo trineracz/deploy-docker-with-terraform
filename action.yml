@@ -26,9 +26,10 @@ runs:
   steps:
     - name: Remove existing containers
       shell: bash
-      run: |
-        ssh -o StrictHostKeyChecking=no "${{ inputs.TERRAFORM_DOCKER_HOST_URI }}" "docker rm -f ${{ inputs.TERRAFORM_DOCKER_CONTAINER_NAME }} || true"
-        ssh -o StrictHostKeyChecking=no "${{ inputs.TERRAFORM_DOCKER_HOST_URI }}" "docker rmi -f ${{ inputs.TERRAFORM_DOCKER_IMAGE }} || true"
+      run: >
+        ssh -o StrictHostKeyChecking=no "${{ inputs.TERRAFORM_DOCKER_HOST_URI }}"
+          "docker rename ${{ inputs.TERRAFORM_DOCKER_CONTAINER_NAME }} ${{ inputs.TERRAFORM_DOCKER_CONTAINER_NAME }}_bak || true"
+
 
     # Install the latest version of Terraform CLI
     - name: Setup Terraform
@@ -61,3 +62,9 @@ runs:
     - name: Terraform Apply
       shell: bash
       run: terraform apply -auto-approve -input=false
+
+   - name: Remove backup container
+      shell: bash
+      run: >
+        ssh -o StrictHostKeyChecking=no "${{ inputs.TERRAFORM_DOCKER_HOST_URI }}"
+          "docker rm -f ${{ inputs.TERRAFORM_DOCKER_CONTAINER_NAME }}_bak || true"

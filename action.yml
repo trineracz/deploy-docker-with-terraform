@@ -24,15 +24,17 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Remove existing containers
+    - name: Rename existing container
       shell: bash
-      run: |
-        ssh -o StrictHostKeyChecking=no "${{ inputs.TERRAFORM_DOCKER_HOST_URI }}" "docker rm -f ${{ inputs.TERRAFORM_DOCKER_CONTAINER_NAME }} || true"
-        ssh -o StrictHostKeyChecking=no "${{ inputs.TERRAFORM_DOCKER_HOST_URI }}" "docker rmi -f ${{ inputs.TERRAFORM_DOCKER_IMAGE }} || true"
+      id: rename_container
+      run: >
+        ssh -v -o StrictHostKeyChecking=no "${{ inputs.TERRAFORM_DOCKER_HOST_URI }}" "docker rename ${{ inputs.TERRAFORM_DOCKER_CONTAINER_NAME }} ${{ inputs.TERRAFORM_DOCKER_CONTAINER_NAME }}_bak"
+
 
     # Install the latest version of Terraform CLI
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
+      if: always()
 
     - name: Configure Terraform variables
       shell: bash
@@ -61,3 +63,9 @@ runs:
     - name: Terraform Apply
       shell: bash
       run: terraform apply -auto-approve -input=false
+
+    - name: Remove backup container
+      shell: bash
+      run: >
+        ssh -v -o StrictHostKeyChecking=no "${{ inputs.TERRAFORM_DOCKER_HOST_URI }}"
+          "docker rm -f ${{ inputs.TERRAFORM_DOCKER_CONTAINER_NAME }}_bak"

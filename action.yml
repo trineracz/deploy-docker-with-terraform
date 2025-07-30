@@ -5,6 +5,10 @@ inputs:
   TERRAFORM_DOCKER_IMAGE:
     description: 'Docker image to use'
     required: true
+  TERRAFORM_DOCKER_TAG:
+    description: 'Docker tag to use'
+    required: true
+    default: 'latest'
   TERRAFORM_DOCKER_CONTAINER_NAME:
     description: 'Docker container name to assign'
     required: true
@@ -34,7 +38,7 @@ runs:
       shell: bash
       run: |
         echo "TF_VAR_docker_host_uri=${{ inputs.TERRAFORM_DOCKER_HOST_URI }}" >> $GITHUB_ENV
-        echo "TF_VAR_docker_image=${{ inputs.TERRAFORM_DOCKER_IMAGE }}:latest" >> $GITHUB_ENV
+        echo "TF_VAR_docker_image=${{ inputs.TERRAFORM_DOCKER_IMAGE }}:${{ inputs.TERRAFORM_DOCKER_TAG }}" >> $GITHUB_ENV
         echo "TF_VAR_ghcr_token=${{ inputs.TERRAFORM_GHCR_TOKEN }}" >> $GITHUB_ENV
         echo "TF_VAR_ghcr_username=${{ inputs.TERRAFORM_GHCR_USERNAME }}" >> $GITHUB_ENV
         echo "TF_VAR_deploy_domain=${{ inputs.TERRAFORM_DEPLOY_DOMAIN }}" >> $GITHUB_ENV

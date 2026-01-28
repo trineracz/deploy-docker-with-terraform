@@ -40,7 +40,8 @@ runs:
       shell: bash
       run: |
         echo "TF_VAR_docker_host_uri=${{ inputs.TERRAFORM_DOCKER_HOST_URI }}" >> $GITHUB_ENV
-        echo "TF_VAR_docker_image=${{ inputs.TERRAFORM_DOCKER_IMAGE }}:${{ inputs.TERRAFORM_DOCKER_TAG }}" >> $GITHUB_ENV
+        echo "TF_VAR_docker_image=${{ inputs.TERRAFORM_DOCKER_IMAGE }}" >> $GITHUB_ENV
+        echo "TF_VAR_docker_tag=${{ inputs.TERRAFORM_DOCKER_TAG }}" >> $GITHUB_ENV
         echo "TF_VAR_ghcr_token=${{ inputs.TERRAFORM_GHCR_TOKEN }}" >> $GITHUB_ENV
         echo "TF_VAR_ghcr_username=${{ inputs.TERRAFORM_GHCR_USERNAME }}" >> $GITHUB_ENV
         echo "TF_VAR_deploy_domain=${{ inputs.TERRAFORM_DEPLOY_DOMAIN }}" >> $GITHUB_ENV

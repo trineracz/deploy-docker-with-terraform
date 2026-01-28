@@ -68,5 +68,4 @@ runs:
     - name: Remove backup container
       shell: bash
       run: >
-        ssh -v -o StrictHostKeyChecking=no "${{ inputs.TERRAFORM_DOCKER_HOST_URI }}"
-          "docker rm -f ${{ inputs.TERRAFORM_DOCKER_CONTAINER_NAME }}_bak"
+        ssh -v -o StrictHostKeyChecking=no "${{ inputs.TERRAFORM_DOCKER_HOST_URI }}" "docker rm --force ${{ inputs.TERRAFORM_DOCKER_CONTAINER_NAME }}_bak > /dev/null 2>&1 || echo"

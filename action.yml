@@ -7,7 +7,7 @@ inputs:
     required: true
   TERRAFORM_DOCKER_TAG:
     description: 'Docker tag to use'
-    required: true
+    required: false
     default: 'latest'
   TERRAFORM_DOCKER_CONTAINER_NAME:
     description: 'Docker container name to assign'
@@ -39,13 +39,15 @@ runs:
     - name: Configure Terraform variables
       shell: bash
       run: |
-        echo "TF_VAR_docker_host_uri=${{ inputs.TERRAFORM_DOCKER_HOST_URI }}" >> $GITHUB_ENV
-        echo "TF_VAR_docker_image=${{ inputs.TERRAFORM_DOCKER_IMAGE }}" >> $GITHUB_ENV
-        echo "TF_VAR_docker_tag=${{ inputs.TERRAFORM_DOCKER_TAG }}" >> $GITHUB_ENV
-        echo "TF_VAR_ghcr_token=${{ inputs.TERRAFORM_GHCR_TOKEN }}" >> $GITHUB_ENV
-        echo "TF_VAR_ghcr_username=${{ inputs.TERRAFORM_GHCR_USERNAME }}" >> $GITHUB_ENV
-        echo "TF_VAR_deploy_domain=${{ inputs.TERRAFORM_DEPLOY_DOMAIN }}" >> $GITHUB_ENV
-        echo "TF_VAR_docker_container_name=${{ inputs.TERRAFORM_DOCKER_CONTAINER_NAME }}" >> $GITHUB_ENV
+        (
+        echo "TF_VAR_docker_host_uri=${{ inputs.TERRAFORM_DOCKER_HOST_URI }}"
+        echo "TF_VAR_docker_image=${{ inputs.TERRAFORM_DOCKER_IMAGE }}"
+        echo "TF_VAR_docker_tag=${{ inputs.TERRAFORM_DOCKER_TAG }}"
+        echo "TF_VAR_ghcr_token=${{ inputs.TERRAFORM_GHCR_TOKEN }}"
+        echo "TF_VAR_ghcr_username=${{ inputs.TERRAFORM_GHCR_USERNAME }}"
+        echo "TF_VAR_deploy_domain=${{ inputs.TERRAFORM_DEPLOY_DOMAIN }}"
+        echo "TF_VAR_docker_container_name=${{ inputs.TERRAFORM_DOCKER_CONTAINER_NAME }}"
+        ) >> $GITHUB_ENV
 
     - name: Terraform Init
       shell: bash
